@@ -1,0 +1,60 @@
+---
+applyTo: "ruby-upgrade-filta"
+---
+
+# Ruby Version Upgrade — filta
+
+This document covers updating Ruby in the filta gem repository.
+
+**Current version:** See `.ruby-version`
+
+**Target:** Update to the latest stable Ruby version.
+
+## Pre-requisites
+
+The following must support the target Ruby version:
+
+* [ruby-build](https://github.com/rbenv/ruby-build)
+* [ruby/setup-ruby](https://github.com/ruby/setup-ruby)
+
+## Files to Update
+
+### 1. `.ruby-version` File
+
+```bash
+.ruby-version
+```
+
+### 2. Update `ruby/setup-ruby` SHA
+
+Update the SHA in `.github/workflows/ci.yml`:
+
+```bash
+LATEST=$(curl -s "https://api.github.com/repos/ruby/setup-ruby/commits/master" | python3 -c "import sys,json; print(json.load(sys.stdin)['sha'])")
+sed -i '' "s#ruby/setup-ruby@[a-f0-9]*#ruby/setup-ruby@${LATEST}#g" .github/workflows/ci.yml
+```
+
+### 3. Regenerate Appraisals
+
+Run `appraisal update` to regenerate the test matrix gemfiles:
+
+```bash
+appraisal update
+```
+
+Verify that `.github/workflows/ci.yml` includes the new Ruby version in its test matrix.
+
+### 4. Regenerate Lockfiles
+
+```bash
+bundle update --bundler
+```
+
+## Testing
+
+```bash
+bundle install # Verify dependencies resolve
+bundle exec rubocop # Lint code
+bundle exec appraisal install # Regenerate gemfile combinations
+bundle exec appraisal rspec # Run tests across ActiveRecord versions
+```
