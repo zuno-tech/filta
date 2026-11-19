@@ -140,6 +140,9 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.5)
+    nokogiri (1.19.4)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.19.4-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.19.4-x86_64-darwin)
@@ -336,4 +339,4 @@ DEPENDENCIES
   zeitwerk (~> 2.6.0)
 
 BUNDLED WITH
-  4.0.23
+  4.1.0
